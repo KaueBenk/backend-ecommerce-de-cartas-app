@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IController<EntidadeDominio> {
     @PostMapping
-    ResponseEntity<Void> salvar(EntidadeDominio entidade);
+    ResponseEntity<Long> salvar(EntidadeDominio entidade);
     @PutMapping
     ResponseEntity<Void> alterar(EntidadeDominio entidade);
     @DeleteMapping("/{id}")
