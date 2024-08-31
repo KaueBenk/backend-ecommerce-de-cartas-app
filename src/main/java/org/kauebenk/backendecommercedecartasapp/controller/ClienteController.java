@@ -35,6 +35,10 @@ public class ClienteController implements IController<Cliente> {
     @PutMapping
     public ResponseEntity<Void> alterar(@RequestBody Cliente cliente) {
         try {
+            Cliente existingCliente = clienteDAO.consultar(cliente);
+            if (existingCliente == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             clienteDAO.alterar(cliente);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
