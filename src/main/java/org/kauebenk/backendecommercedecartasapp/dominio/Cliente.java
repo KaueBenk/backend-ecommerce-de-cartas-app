@@ -18,6 +18,7 @@ public class Cliente extends EntidadeDominio {
     private String email;
     private String senha;
     private String cpf;
+    private String genero;
     private boolean ativo;
     @ElementCollection
     private List<Endereco> enderecos;
