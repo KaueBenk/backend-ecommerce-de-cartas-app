@@ -20,13 +20,10 @@ public class ClienteController implements IController<Cliente> {
     @PostMapping
     public ResponseEntity<Long> salvar(@RequestBody Cliente cliente) {
         try {
-            Cliente existingCliente = clienteDAO.consultar(cliente);
-            if (existingCliente != null) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
-            }
             clienteDAO.salvar(cliente);
             return new ResponseEntity<>(cliente.getId(), HttpStatus.CREATED);
         } catch (Exception e) {
+            System.out.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
