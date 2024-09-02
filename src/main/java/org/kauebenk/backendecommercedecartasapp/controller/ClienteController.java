@@ -23,7 +23,6 @@ public class ClienteController implements IController<Cliente> {
             clienteDAO.salvar(cliente);
             return new ResponseEntity<>(cliente.getId(), HttpStatus.CREATED);
         } catch (Exception e) {
-            System.out.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
