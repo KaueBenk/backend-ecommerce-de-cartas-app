@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @Embeddable
 public class Endereco extends EntidadeDominio {
+    private String nome;
     private String tipoResidencia;
     private String tipoLogradouro;
     private String logradouro;
