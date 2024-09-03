@@ -3,6 +3,7 @@ package org.kauebenk.backendecommercedecartasapp.dominio;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.kauebenk.backendecommercedecartasapp.enums.GENERO;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class Cliente extends EntidadeDominio {
     private String email;
     private String senha;
     private String cpf;
-    private String genero;
+    private GENERO genero;
     private boolean ativo;
     @ElementCollection
     private List<Endereco> enderecos;
