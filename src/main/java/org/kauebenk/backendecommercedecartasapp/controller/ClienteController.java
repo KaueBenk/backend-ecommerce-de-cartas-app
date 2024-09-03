@@ -21,14 +21,14 @@ public class ClienteController implements IController<Cliente> {
 
     @Override
     @PostMapping
-    public ResponseEntity<Long> salvar(@RequestBody Cliente cliente) {
+    public ResponseEntity<String> salvar(@RequestBody Cliente cliente) {
         try {
             String validacao = validaCliente(cliente);
             if (validacao != null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(validacao, HttpStatus.BAD_REQUEST);
             }
             clienteDAO.salvar(cliente);
-            return new ResponseEntity<>(cliente.getId(), HttpStatus.CREATED);
+            return new ResponseEntity<>(String.valueOf(cliente.getId()), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -36,7 +36,7 @@ public class ClienteController implements IController<Cliente> {
 
     @Override
     @PutMapping
-    public ResponseEntity<Void> alterar(@RequestBody Cliente cliente) {
+    public ResponseEntity<String> alterar(@RequestBody Cliente cliente) {
         try {
             Cliente existingCliente = clienteDAO.consultar(cliente);
             if (existingCliente == null) {
@@ -44,7 +44,7 @@ public class ClienteController implements IController<Cliente> {
             }
             String validacao = validaCliente(cliente);
             if (validacao != null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(validacao, HttpStatus.BAD_REQUEST);
             }
             clienteDAO.alterar(cliente);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -91,49 +91,48 @@ public class ClienteController implements IController<Cliente> {
     }
 
     private String validaCliente(Cliente cliente) {
+        StringBuilder errors = new StringBuilder();
+
         CartaoStrategy cartaoStrategy = new CartaoStrategy();
-        String cartaoStrategyResult = null;
         for (Cartao cartao : cliente.getCartoes()) {
-            cartaoStrategyResult = cartaoStrategy.processar(cartao);
-
+            String cartaoStrategyResult = cartaoStrategy.processar(cartao);
+            if (cartaoStrategyResult != null) {
+                errors.append(cartaoStrategyResult);
+            }
         }
-        if (cartaoStrategyResult != null) {
-            return cartaoStrategyResult;
-        }
 
-        // implemente todas as Strategies
         CartoesStrategy cartoesStrategy = new CartoesStrategy();
         String cartoesStrategyResult = cartoesStrategy.processar(cliente);
         if (cartoesStrategyResult != null) {
-            return cartoesStrategyResult;
+            errors.append(cartoesStrategyResult);
         }
 
         ClienteStrategy clienteStrategy = new ClienteStrategy();
-        if (clienteStrategy.processar(cliente) != null) {
-            return clienteStrategy.processar(cliente);
+        String clienteStrategyResult = clienteStrategy.processar(cliente);
+        if (clienteStrategyResult != null) {
+            errors.append(clienteStrategyResult);
         }
 
         EnderecosStrategy enderecosStrategy = new EnderecosStrategy();
         String enderecosStrategyResult = enderecosStrategy.processar(cliente);
         if (enderecosStrategyResult != null) {
-            return enderecosStrategyResult;
+            errors.append(enderecosStrategyResult);
         }
 
         EnderecoStrategy enderecoStrategy = new EnderecoStrategy();
-        String enderecoStrategyResult = null;
         for (Endereco endereco : cliente.getEnderecos()) {
-            enderecoStrategyResult = enderecoStrategy.processar(endereco);
-        }
-        if (enderecoStrategyResult != null) {
-            return enderecoStrategyResult;
+            String enderecoStrategyResult = enderecoStrategy.processar(endereco);
+            if (enderecoStrategyResult != null) {
+                errors.append(enderecoStrategyResult);
+            }
         }
 
         SenhaStrategy senhaStrategy = new SenhaStrategy();
-        if (senhaStrategy.processar(cliente) != null) {
-            return senhaStrategy.processar(cliente);
+        String senhaStrategyResult = senhaStrategy.processar(cliente);
+        if (senhaStrategyResult != null) {
+            errors.append(senhaStrategyResult);
         }
 
-        return null;
-
+        return errors.length() > 0 ? errors.toString() : null;
     }
 }

@@ -5,19 +5,21 @@ import org.kauebenk.backendecommercedecartasapp.dominio.Cliente;
 public class SenhaStrategy implements IStrategy<Cliente> {
     @Override
     public String processar(Cliente entidade) {
+        StringBuilder errors = new StringBuilder();
+
         if (entidade.getSenha().length() < 8) {
-            return "A senha deve ter pelo menos 8 caracteres.";
+            errors.append("A senha deve ter pelo menos 8 caracteres.\n");
         }
         if (entidade.getSenha().equals(entidade.getSenha().toLowerCase())) {
-            return "A senha deve ter pelo menos uma letra maiúscula.";
+            errors.append("A senha deve ter pelo menos uma letra maiúscula.\n");
         }
         if (entidade.getSenha().equals(entidade.getSenha().toUpperCase())) {
-            return "A senha deve ter pelo menos uma letra minúscula.";
+            errors.append("A senha deve ter pelo menos uma letra minúscula.\n");
         }
         if (entidade.getSenha().matches("[a-zA-Z0-9 ]*")) {
-            return "A senha deve ter pelo menos um caractere especial.";
+            errors.append("A senha deve ter pelo menos um caractere especial.\n");
         }
 
-        return null;
+        return !errors.isEmpty() ? errors.toString() : null;
     }
 }

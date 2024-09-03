@@ -5,33 +5,36 @@ import org.kauebenk.backendecommercedecartasapp.dominio.Endereco;
 public class EnderecoStrategy implements IStrategy<Endereco> {
     @Override
     public String processar(Endereco entidade) {
+        StringBuilder errors = new StringBuilder();
+
         if (entidade.getTipoResidencia() == null) {
-            return "O tipo de residência é obrigatório.";
+            errors.append("O tipo de residência é obrigatório.\n");
         }
         if (entidade.getTipoLogradouro() == null) {
-            return "O tipo de logradouro é obrigatório.";
+            errors.append("O tipo de logradouro é obrigatório.\n");
         }
         if (entidade.getLogradouro() == null) {
-            return "O logradouro é obrigatório.";
+            errors.append("O logradouro é obrigatório.\n");
         }
         if (entidade.getNumero() == null) {
-            return "O número é obrigatório.";
+            errors.append("O número é obrigatório.\n");
         }
         if (entidade.getBairro() == null) {
-            return "O bairro é obrigatório.";
+            errors.append("O bairro é obrigatório.\n");
         }
         if (entidade.getCep() == null) {
-            return "O CEP é obrigatório.";
+            errors.append("O CEP é obrigatório.\n");
         }
         if (entidade.getCidade() == null) {
-            return "A cidade é obrigatória.";
+            errors.append("A cidade é obrigatória.\n");
         }
         if (entidade.getEstado() == null) {
-            return "O estado é obrigatório.";
+            errors.append("O estado é obrigatório.\n");
         }
         if (entidade.getPais() == null) {
-            return "O país é obrigatório.";
+            errors.append("O país é obrigatório.\n");
         }
-        return null;
+
+        return !errors.isEmpty() ? errors.toString() : null;
     }
 }

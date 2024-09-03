@@ -6,15 +6,18 @@ import org.kauebenk.backendecommercedecartasapp.dominio.Cliente;
 public class CartoesStrategy implements IStrategy<Cliente> {
     @Override
     public String processar(Cliente entidade) {
+        StringBuilder errors = new StringBuilder();
+
         if (entidade.getCartoes().isEmpty()) {
-            return "O cliente deve ter pelo menos um cartão cadastrado.";
+            errors.append("O cliente deve ter pelo menos um cartão cadastrado.\n");
         }
         if (entidade.getCartoes().stream().noneMatch(Cartao::isECartaoPadrao)) {
-            return "O cliente deve ter um cartão padrão.";
+            errors.append("O cliente deve ter um cartão padrão.\n");
         }
         if (entidade.getCartoes().stream().filter(Cartao::isECartaoPadrao).count() > 1) {
-            return "O cliente deve ter apenas um cartão padrão.";
+            errors.append("O cliente deve ter apenas um cartão padrão.\n");
         }
-        return null;
+
+        return !errors.isEmpty() ? errors.toString() : null;
     }
 }

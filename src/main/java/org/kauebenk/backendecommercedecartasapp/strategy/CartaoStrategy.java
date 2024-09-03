@@ -7,28 +7,29 @@ import java.util.List;
 public class CartaoStrategy implements IStrategy<Cartao> {
     @Override
     public String processar(Cartao entidade) {
+        StringBuilder errors = new StringBuilder();
         List<String> bandeiras = List.of("Visa", "Mastercard", "Elo", "American Express");
+
         if (entidade.getNumero().length() != 16) {
-            return "O número do cartão deve ter 16 dígitos.";
+            errors.append("O número do cartão deve ter 16 dígitos.\n");
         }
         if (entidade.getNomeImpresso().length() < 5) {
-            return "O nome impresso no cartão deve ter pelo menos 5 caracteres.";
+            errors.append("O nome impresso no cartão deve ter pelo menos 5 caracteres.\n");
         }
         if (entidade.getBandeira() == null) {
-            return "A bandeira do cartão é obrigatória.";
-        }
-        if (!bandeiras.contains(entidade.getBandeira())) {
-            return "A bandeira do cartão é inválida.";
+            errors.append("A bandeira do cartão é obrigatória.\n");
+        } else if (!bandeiras.contains(entidade.getBandeira())) {
+            errors.append("A bandeira do cartão é inválida.\n");
         }
         if (entidade.getCvv() == null) {
-            return "O código de segurança é obrigatório.";
-        }
-        if (entidade.getCvv().length() != 3) {
-            return "O código de segurança deve ter 3 dígitos.";
+            errors.append("O código de segurança é obrigatório.\n");
+        } else if (entidade.getCvv().length() != 3) {
+            errors.append("O código de segurança deve ter 3 dígitos.\n");
         }
         if (entidade.getValidade() == null) {
-            return "A validade do cartão é obrigatória.";
+            errors.append("A validade do cartão é obrigatória.\n");
         }
-        return null;
+
+        return !errors.isEmpty() ? errors.toString() : null;
     }
 }

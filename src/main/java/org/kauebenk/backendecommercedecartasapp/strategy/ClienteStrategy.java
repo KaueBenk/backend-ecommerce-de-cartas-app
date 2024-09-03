@@ -7,33 +7,37 @@ import org.kauebenk.backendecommercedecartasapp.dominio.Cliente;
 public class ClienteStrategy implements IStrategy<Cliente> {
     @Override
     public String processar(Cliente entidade) {
+        StringBuilder errors = new StringBuilder();
+
         if (entidade.getGenero() == null) {
-            return "O gênero é obrigatório.";
+            errors.append("O gênero é obrigatório.\n");
         }
         if (entidade.getNome() == null) {
-            return "O nome é obrigatório.";
+            errors.append("O nome é obrigatório.\n");
         }
         if (entidade.getCpf() == null) {
-            return "O CPF é obrigatório.";
-        }
-        CPFValidator cpfValidator = new CPFValidator();
-        try {
-            cpfValidator.assertValid(entidade.getCpf());
-        } catch (InvalidStateException e) {
-            return "CPF inválido.";
+            errors.append("O CPF é obrigatório.\n");
+        } else {
+            CPFValidator cpfValidator = new CPFValidator();
+            try {
+                cpfValidator.assertValid(entidade.getCpf());
+            } catch (InvalidStateException e) {
+                errors.append("CPF inválido.\n");
+            }
         }
         if (entidade.getTelefone() == null) {
-            return "O telefone é obrigatório.";
+            errors.append("O telefone é obrigatório.\n");
         }
         if (entidade.getEmail() == null) {
-            return "O e-mail é obrigatório.";
+            errors.append("O e-mail é obrigatório.\n");
         }
         if (entidade.getSenha() == null) {
-            return "A senha é obrigatória.";
+            errors.append("A senha é obrigatória.\n");
         }
         if (entidade.getEnderecos() == null) {
-            return "O endereço é obrigatório.";
+            errors.append("O endereço é obrigatório.\n");
         }
-        return null;
+
+        return !errors.isEmpty() ? errors.toString() : null;
     }
 }
