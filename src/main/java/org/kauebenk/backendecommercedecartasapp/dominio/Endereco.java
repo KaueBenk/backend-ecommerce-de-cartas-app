@@ -19,6 +19,6 @@ public class Endereco extends EntidadeDominio {
     private String estado;
     private String pais;
     private String observacoes;
-    private boolean eEnderecoCobranca;
-    private boolean eEnderecoEntregaPadrao;
+    private boolean enderecoCobranca;
+    private boolean enderecoEntregaPadrao;
 }

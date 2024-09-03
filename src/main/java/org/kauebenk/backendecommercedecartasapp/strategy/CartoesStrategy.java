@@ -11,10 +11,10 @@ public class CartoesStrategy implements IStrategy<Cliente> {
         if (entidade.getCartoes().isEmpty()) {
             errors.append("O cliente deve ter pelo menos um cartão cadastrado.\n");
         }
-        if (entidade.getCartoes().stream().noneMatch(Cartao::isECartaoPadrao)) {
+        if (entidade.getCartoes().stream().noneMatch(Cartao::isCartaoPadrao)) {
             errors.append("O cliente deve ter um cartão padrão.\n");
         }
-        if (entidade.getCartoes().stream().filter(Cartao::isECartaoPadrao).count() > 1) {
+        if (entidade.getCartoes().stream().filter(Cartao::isCartaoPadrao).count() > 1) {
             errors.append("O cliente deve ter apenas um cartão padrão.\n");
         }
 

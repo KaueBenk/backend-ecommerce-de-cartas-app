@@ -14,5 +14,5 @@ public class Cartao extends EntidadeDominio {
     private String cvv;
     private String validade;
     private String observacoes;
-    private boolean eCartaoPadrao;
+    private boolean CartaoPadrao;
 }
